@@ -1,0 +1,32 @@
+{
+  "url": "https://tartan-tickets-delta.vercel.app",
+  "checkedAt": "2026-10-22T22:25:56.795Z",
+  "method": "Automated Chrome browser checks by Codex; not a student manual review",
+  "checks": [
+    {
+      "tried": "Submit blank buyer name",
+      "expected": "Browser refuses blank form",
+      "actual": "Required-field validation blocked checkout",
+      "broke": false
+    },
+    {
+      "tried": "Request 5 tickets",
+      "expected": "Refuse quantity above four",
+      "actual": "Browser validation blocked checkout; server rejection also covered by tests",
+      "broke": false
+    },
+    {
+      "tried": "Reserve 2 tickets then simulate decline",
+      "expected": "Decline message and release seats",
+      "actual": "Decline message displayed and availability refreshed",
+      "broke": false
+    },
+    {
+      "tried": "Pay for 2 tickets with simulated payment",
+      "expected": "$30 total, receipt and 2 QR codes",
+      "actual": "Receipt displayed $30 total and two QR codes; no real payment or email",
+      "broke": false
+    }
+  ],
+  "browserErrors": []
+}

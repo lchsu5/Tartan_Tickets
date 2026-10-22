@@ -78,6 +78,24 @@ The receipt was also checked at 390px width with no horizontal overflow or page
 errors. Saved screenshots and JSON record the actual results, URL, and method.
 These checks do not claim the student personally performed them.
 
-Live verification will be recorded separately after publication. Use the actual
-results when preparing the submission; do not substitute expected results for
-observations.
+## Live-URL checks
+
+GitHub commit `990db4a` automatically triggered deployment
+`dpl_5K44PPxp66vihc92hsfpq3mpat3c`, confirmed Ready on October 22, 2026.
+The following automated Chrome checks ran against
+https://tartan-tickets-delta.vercel.app at approximately 6:25 p.m. ET.
+
+| What I tried | What the scoped spec says should happen | What happened |
+|---|---|---|
+| Submit a blank buyer name | Refuse empty input | Browser required-field validation blocked checkout. |
+| Request five tickets | Refuse quantities above four | Browser range validation blocked checkout; separate server tests verify direct API rejection. |
+| Reserve two tickets and simulate decline | Decline and release the hold | The decline message appeared and availability refreshed; the server release behavior is independently tested. |
+| Reserve two tickets and simulate payment | Show $30 total and two ticket QR codes | Receipt displayed $30 and two QR codes, with an explicit no-payment/no-email notice. |
+
+No browser page errors were reported; a 390px-wide receipt had no horizontal
+overflow. [Actual live results](evidence/story-3-live-checks.json),
+[live receipt screenshot](evidence/story-3-live-receipt.png), and
+[mobile screenshot](evidence/story-3-live-mobile.png) are saved.
+
+These are agent-run browser checks, not a claim of student manual review.
+The student should still repeat the walkthrough and report their own observations.
