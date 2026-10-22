@@ -1,5 +1,9 @@
 # Task 1 verification
 
+This records the original Story 1 exercise. For the subsequent HW3 Part B build,
+see [Story 3 evidence](STORY_3_EVIDENCE.md); the current app also supports
+simulated ticket checkout, so the original scope notes below are historical.
+
 Checked October 22, 2026. Current results do not establish the order in which
 earlier work happened. Only Story 1 is required for today's build.
 

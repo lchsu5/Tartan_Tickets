@@ -1,0 +1,13 @@
+
+> tartan-tickets-demo@1.0.0 test
+> vitest run
+
+
+ RUN  v5.0.5 C:/Users/lizhs/OneDrive/Documents/GitHub/Tartan_Tickets/TartanTickets
+
+
+ Test Files  4 passed (4)
+      Tests  35 passed (35)
+   Start at  18:24:30
+   Duration  2.00s (environment 62%, import 17%, tests 16%, transform 4%, worker 1%)
+

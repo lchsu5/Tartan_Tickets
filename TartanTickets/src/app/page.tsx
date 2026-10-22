@@ -27,7 +27,7 @@ export default function HomePage() {
       <EventList events={events} />
       <footer className="site-footer">
         <p>Made for the moments that bring us together.</p>
-        <p>Ticket purchases are not enabled in this demo.</p>
+        <p>Simulated tickets only. No real payment or email.</p>
       </footer>
     </main>
   );

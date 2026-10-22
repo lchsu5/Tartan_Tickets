@@ -86,7 +86,7 @@ describe("Story 1: browse upcoming events", () => {
     ).toBeTruthy();
   });
 
-  it("explains that the available-seat ticket button is a demo and takes no payment", () => {
+  it("opens a clearly labelled simulated checkout without taking real payment", () => {
     render(<EventList events={events} now={now} />);
 
     fireEvent.click(
@@ -95,11 +95,8 @@ describe("Story 1: browse upcoming events", () => {
       }),
     );
 
-    expect(
-      screen.getByRole("status").textContent,
-    ).toBe(
-      "Demo only: ticket purchasing isn't available yet. No ticket was purchased and no payment was taken.",
-    );
+    expect(screen.getByText("Simulation only. No real payment or email." )).toBeTruthy();
+    expect(screen.getByLabelText("Buyer name")).toBeTruthy();
   });
 
   it("submits a typed name to join a sold-out event's waitlist", async () => {

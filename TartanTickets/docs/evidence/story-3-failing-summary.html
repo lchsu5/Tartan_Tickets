@@ -1,0 +1,26 @@
+<!doctype html><meta charset="utf-8"><style>body{background:#172027;color:#e8edf0;font:18px monospace;margin:36px}h1{font:26px Arial}pre{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}</style><h1>Before implementation: real failing run</h1><p>Tartan Tickets · October 22, 2026 · Saved command output excerpt</p><pre>     85|     expect((await POST(new Request("http://localhost/api/orders", { me…
+     86|     expect((await api({ action: "pay", orderId: "missing" })).status).…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/18]⎯
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  18 failed | 15 passed (33)
+   Start at  18:18:17
+   Duration  3.01s (environment 76%, import 14%, tests 7%, transform 2%, worker 1%)
+
+
+
+
+Separate pre-implementation scaffold run — actual assertion excerpt:
+AssertionError: expected 501 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 501
+
+ ❯ tests/story-3-orders.test.ts:68:29
+     66|     vi.advanceTimersByTime(600000);
+     67|     const response = await api({ action: "pay", orderId: order.id });
+     68|     expect(response.status).to</pre>

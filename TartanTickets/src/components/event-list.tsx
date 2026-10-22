@@ -1,6 +1,7 @@
 "use client";
 
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useCallback, useState } from "react";
+import Checkout from "./checkout";
 import type { EventRecord } from "@/lib/events";
 
 type EventListProps = {
@@ -25,7 +26,16 @@ export default function EventList({
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const upcomingEvents = events
+  const [inventory, setInventory] = useState(events);
+  const [checkoutId, setCheckoutId] = useState<string | null>(null);
+  const refreshInventory = useCallback(async () => {
+    try {
+      const response = await fetch("/api/events", { cache: "no-store" });
+      if (!response.ok) throw new Error("Inventory unavailable");
+      setInventory(await response.json());
+    } catch { setMessage("Could not refresh seat availability. Reload the page to check it."); }
+  }, []);
+  const upcomingEvents = inventory
     .filter((event) => new Date(event.startsAt).getTime() > now.getTime())
     .sort(
       (left, right) =>
@@ -111,16 +121,17 @@ export default function EventList({
               ) : (
                 <button
                   className="button"
-                  onClick={() =>
-                    setMessage(
-                      "Demo only: ticket purchasing isn't available yet. No ticket was purchased and no payment was taken.",
-                    )
-                  }
+                  disabled={checkoutId !== null}
+                  onClick={() => { setCheckoutId(event.id); setSelectedEvent(null); setMessage(""); }}
                   type="button"
                 >
                   Buy tickets for {event.title} (Demo)
                 </button>
               )}
+              {checkoutId === event.id && <Checkout event={event} onInventoryChange={refreshInventory} onClose={() => setCheckoutId(null)} onSoldOut={() => {
+                setCheckoutId(null);
+                setInventory((current) => current.map((item) => item.id === event.id ? { ...item, ticketsSold: item.capacity } : item));
+              }} />}
               {selectedEvent?.id === event.id && (
                 <form className="waitlist-form" onSubmit={submitWaitlist}>
                   <label htmlFor={`waitlist-name-${event.id}`}>Your name</label>

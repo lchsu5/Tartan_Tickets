@@ -220,6 +220,21 @@ h1 {
   padding: 8px 10px;
 }
 
+.checkout {
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  width: min(390px, 100%);
+}
+
+.checkout h3 { margin: 0 0 8px; }
+.checkout p { margin: 10px 0; }
+.checkout-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.checkout figure { margin: 12px 0; }
+.checkout img { max-width: 100%; height: auto; }
+.checkout code { overflow-wrap: anywhere; }
+
 .status-message {
   color: var(--success);
   font-size: 0.95rem;

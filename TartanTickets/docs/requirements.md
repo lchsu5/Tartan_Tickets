@@ -92,3 +92,26 @@ As an officer, I want to scan tickets at the door.
 - All tests pass, including the security tests.
 - A person has reviewed the code against this spec.
 - The docs and the spec match the shipped behavior.
+
+## Scope for HW3
+
+- Build Story 3: Buy tickets, in addition to the existing Story 1 event browsing.
+- No real payments. Use a "Simulated payment" button and a "Simulate decline"
+  button. Real payments are a non-goal.
+- No sign-in provider. Use a typed name (1–100 non-whitespace characters after
+  trimming); it is not verified identity. Real authentication is a non-goal.
+- No database. Keep events, reservations, and receipts in server memory. Data
+  resets on every deploy/restart and is not shared across server instances.
+- Accept only integer quantities from 1 through 4 per order. Compute totals on
+  the server from the event price; ignore browser-supplied totals.
+- Reserve seats atomically within one server instance for exactly 10 minutes.
+  Expired holds are released when the next inventory/order request is handled.
+  Payment at or after expiry is rejected; it cannot revive an expired hold.
+- A successful simulated payment immediately shows a simulated receipt with a
+  unique QR token per ticket. Display QR codes on screen; real email delivery is
+  explicitly deferred, replacing Story 3's emailed receipt for this homework.
+- Declines release the hold. Repeated payment/decline requests do not issue extra
+  tickets or release already purchased seats. Disable buttons during submission.
+- If another checkout takes the requested seats before reservation, reject the
+  order and offer the waitlist when sold out. An active hold protects its seats.
+- This prototype does not claim cross-instance overselling protection on Vercel.

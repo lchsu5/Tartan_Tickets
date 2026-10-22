@@ -8,6 +8,18 @@ export type EventRecord = {
   ticketsSold: number;
 };
 
+export type DemoOrder = {
+  id: string;
+  eventId: string;
+  name: string;
+  seats: number;
+  totalCents: number;
+  expiresAt: string;
+  status: "held" | "paid" | "declined" | "expired";
+  simulated: true;
+  tickets: { token: string; qrDataUrl?: string }[];
+};
+
 function dateInDays(daysFromNow: number): string {
   const date = new Date();
   date.setUTCDate(date.getUTCDate() + daysFromNow);
@@ -15,7 +27,7 @@ function dateInDays(daysFromNow: number): string {
   return date.toISOString();
 }
 
-export const events: EventRecord[] = [
+const seedEvents: EventRecord[] = [
   {
     id: "autumn-gala",
     title: "Autumn Gala",
@@ -45,16 +57,42 @@ export const events: EventRecord[] = [
   },
 ];
 
+// Share state between route bundles in one Node process, never between instances.
+const globalStore = globalThis as typeof globalThis & {
+  tartanDemo?: { events: EventRecord[]; orders: Map<string, DemoOrder>; waitlists: Map<string, string[]> };
+};
+const freshStore = () => ({ events: seedEvents, orders: new Map<string, DemoOrder>(), waitlists: new Map<string, string[]>() });
+const store = process.env.NODE_ENV === "test" ? freshStore() : (globalStore.tartanDemo ??= freshStore());
+export const events = store.events;
+export const orders = store.orders;
+
+export function releaseExpiredHolds(now = new Date()) {
+  for (const order of orders.values()) {
+    if (order.status === "held" && Date.parse(order.expiresAt) <= now.getTime()) {
+      order.status = "expired";
+    }
+  }
+}
+
+export function seatsRemaining(event: EventRecord, now = new Date()) {
+  releaseExpiredHolds(now);
+  const held = [...orders.values()].filter((o) => o.eventId === event.id && o.status === "held")
+    .reduce((sum, o) => sum + o.seats, 0);
+  return Math.max(0, event.capacity - event.ticketsSold - held);
+}
+
 export function getUpcomingEvents(now = new Date()): EventRecord[] {
   return events
     .filter((event) => new Date(event.startsAt).getTime() > now.getTime())
     .sort(
       (left, right) =>
         new Date(left.startsAt).getTime() - new Date(right.startsAt).getTime(),
-    );
+    )
+    // Listing count includes active reservations as unavailable seats.
+    .map((event) => ({ ...event, ticketsSold: event.capacity - seatsRemaining(event, now) }));
 }
 
-const waitlists = new Map<string, string[]>();
+const waitlists = store.waitlists;
 
 export function joinWaitlist(
   eventId: string,
@@ -67,7 +105,7 @@ export function joinWaitlist(
     throw new Error("We couldn't find that upcoming event.");
   }
 
-  if (event.capacity > event.ticketsSold) {
+  if (seatsRemaining(event, now) > 0) {
     throw new Error("This event still has seats available.");
   }
 

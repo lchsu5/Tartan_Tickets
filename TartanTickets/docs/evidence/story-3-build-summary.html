@@ -1,0 +1,28 @@
+<!doctype html><meta charset="utf-8"><style>body{background:#172027;color:#e8edf0;font:18px monospace;margin:36px}h1{font:26px Arial}pre{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}</style><h1>After implementation: real production build</h1><p>Tartan Tickets · October 22, 2026 · Saved command output excerpt</p><pre>
+&gt; tartan-tickets-demo@1.0.0 build
+&gt; next build
+
+▲ Next.js 16.4.2 (Turbopack)
+✓ Running next.config.ts took 58ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 339ms
+  Running TypeScript ...
+  Finished TypeScript in 3.0s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/3) ...
+✓ Generating static pages using 7 workers (3/3) in 912ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /api/events
+├ ƒ /api/orders
+└ ƒ /api/waitlist
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+</pre>
