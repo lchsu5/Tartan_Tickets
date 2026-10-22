@@ -125,7 +125,7 @@ export default function EventList({
                   onClick={() => { setCheckoutId(event.id); setSelectedEvent(null); setMessage(""); }}
                   type="button"
                 >
-                  Buy tickets for {event.title} (Demo)
+                  Buy tickets for {event.title}
                 </button>
               )}
               {checkoutId === event.id && <Checkout event={event} onInventoryChange={refreshInventory} onClose={() => setCheckoutId(null)} onSoldOut={() => {

@@ -55,7 +55,7 @@ From `TartanTickets/`, run `npm.cmd run dev` and open http://localhost:3000
 (or the alternative port printed by Next.js). For production mode use
 `npm.cmd run build` followed by `npm.cmd start`.
 
-1. Click **Buy tickets for Autumn Gala (Demo)**.
+1. Click **Buy tickets for Autumn Gala**.
 2. Enter a made-up buyer name and choose **2** tickets.
 3. Click **Reserve tickets**. Check the $30.00 total and ten-minute countdown.
 4. Click **Simulated payment**. Check the receipt and two QR codes. No real

@@ -16,7 +16,7 @@ describe("Story 3: checkout browser interface", () => {
       .mockResolvedValueOnce({ ok: true, json: async () => [event] });
     vi.stubGlobal("fetch", mock);
     render(<EventList events={[event]} />);
-    fireEvent.click(screen.getByRole("button", { name: "Buy tickets for Autumn Gala (Demo)" }));
+    fireEvent.click(screen.getByRole("button", { name: "Buy tickets for Autumn Gala" }));
     fireEvent.change(screen.getByLabelText("Buyer name"), { target: { value: "Alex" } });
     fireEvent.change(screen.getByLabelText("Number of tickets"), { target: { value: "2" } });
     fireEvent.click(screen.getByRole("button", { name: "Reserve tickets" }));
@@ -28,12 +28,12 @@ describe("Story 3: checkout browser interface", () => {
     expect(mock.mock.calls[0][1].body).toBe(JSON.stringify({ action: "reserve", eventId: event.id, name: "Alex", seats: 2 }));
     fireEvent.click(screen.getByRole("button", { name: "Back to events" }));
     expect(screen.queryByRole("heading", { name: "Simulated receipt" })).toBeNull();
-    expect(screen.getByRole("button", { name: "Buy tickets for Autumn Gala (Demo)" }).hasAttribute("disabled")).toBe(false);
+    expect(screen.getByRole("button", { name: "Buy tickets for Autumn Gala" }).hasAttribute("disabled")).toBe(false);
   });
   it("offers the waitlist when another buyer takes the last seats", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, json: async () => ({ error: "Sold out.", waitlist: true }) }));
     render(<EventList events={[event]} />);
-    fireEvent.click(screen.getByRole("button", { name: "Buy tickets for Autumn Gala (Demo)" }));
+    fireEvent.click(screen.getByRole("button", { name: "Buy tickets for Autumn Gala" }));
     fireEvent.change(screen.getByLabelText("Buyer name"), { target: { value: "Alex" } });
     fireEvent.click(screen.getByRole("button", { name: "Reserve tickets" }));
     await waitFor(() => expect(screen.getByRole("button", { name: "Join waitlist for Autumn Gala" })).toBeTruthy());

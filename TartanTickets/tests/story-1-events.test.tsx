@@ -81,7 +81,7 @@ describe("Story 1: browse upcoming events", () => {
     ).toBeNull();
     expect(
       screen.getByRole("button", {
-        name: "Buy tickets for Autumn Gala (Demo)",
+        name: "Buy tickets for Autumn Gala",
       }),
     ).toBeTruthy();
   });
@@ -91,7 +91,7 @@ describe("Story 1: browse upcoming events", () => {
 
     fireEvent.click(
       screen.getByRole("button", {
-        name: "Buy tickets for Autumn Gala (Demo)",
+        name: "Buy tickets for Autumn Gala",
       }),
     );
 
