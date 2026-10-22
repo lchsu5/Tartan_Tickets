@@ -41,3 +41,12 @@ All requirements use EARS syntax. Assumption IDs (A1–A12) refer to the list in
 
 - **SEC-21** When a role change, refund, event cancellation, Stripe account change, or attendee export occurs, the system shall write an audit log entry recording who did it, what changed, and when.
 - **SEC-22** The system shall keep audit logs append-only, readable only by platform admins, for one year.
+
+## Request size protection (HW3)
+
+- **SEC-23** WHEN a POST request to `/api/orders` declares or streams a body
+  larger than 16,384 bytes (16 KiB), THE system SHALL reject it with HTTP 413
+  before parsing JSON or changing order/inventory state, SHALL stop reading the
+  body once the limit is exceeded, and SHALL enforce the limit even when
+  `Content-Length` is missing or understates the actual size. A body exactly at
+  the limit SHALL remain eligible for normal validation.

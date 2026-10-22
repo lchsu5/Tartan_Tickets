@@ -6,6 +6,34 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 const json = (data: unknown, status = 200) => Response.json(data, { status, headers: { "Cache-Control": "no-store" } });
 
+const MAX_BODY_BYTES = 16384;
+class RequestTooLarge extends Error {}
+
+async function readBoundedJson(request: Request): Promise<unknown> {
+  const declaredLength = request.headers.get("content-length");
+  if (declaredLength && /^\d+$/.test(declaredLength) && Number(declaredLength) > MAX_BODY_BYTES) {
+    await request.body?.cancel().catch(() => {});
+    throw new RequestTooLarge();
+  }
+  if (!request.body) throw new SyntaxError("Missing JSON body");
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let bytes = 0;
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      bytes += value.byteLength;
+      if (bytes > MAX_BODY_BYTES) {
+        await reader.cancel().catch(() => {});
+        throw new RequestTooLarge();
+      }
+      chunks.push(value);
+    }
+  } finally { reader.releaseLock(); }
+  return JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(Buffer.concat(chunks, bytes)));
+}
+
 async function receipt(order: DemoOrder) {
   return { ...order, tickets: await Promise.all(order.tickets.map(async (ticket) => ({
     token: ticket.token,
@@ -14,17 +42,21 @@ async function receipt(order: DemoOrder) {
 }
 
 export async function POST(request: Request) {
-  let body;
-  try { body = await request.json(); }
-  catch { return json({ error: "Please send valid JSON." }, 400); }
-  if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "Invalid request." }, 400);
+  let payload: unknown;
+  try { payload = await readBoundedJson(request); }
+  catch (error) {
+    if (error instanceof RequestTooLarge) return json({ error: "Checkout request exceeds the 16 KiB limit." }, 413);
+    return json({ error: "Please send valid JSON." }, 400);
+  }
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return json({ error: "Invalid request." }, 400);
+  const body = payload as Record<string, unknown>;
   releaseExpiredHolds();
 
   if (body.action === "reserve") {
     if (typeof body.name !== "string" || !body.name.trim() || body.name.trim().length > 100) {
       return json({ error: "Enter a buyer name from 1 to 100 characters." }, 400);
     }
-    if (!Number.isInteger(body.seats) || body.seats < 1 || body.seats > 4) {
+    if (typeof body.seats !== "number" || !Number.isInteger(body.seats) || body.seats < 1 || body.seats > 4) {
       return json({ error: "Choose a whole number from 1 to 4 tickets." }, 400);
     }
     const event = events.find((e) => e.id === body.eventId && Date.parse(e.startsAt) > Date.now());

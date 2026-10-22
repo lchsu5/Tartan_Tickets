@@ -1,5 +1,11 @@
 # Tartan Tickets: Test Spec
 
+## HW3 request-size security tests
+
+`tests/sec-23-request-size.test.ts` covers SEC-23: oversized declared bodies,
+missing/understated Content-Length, UTF-8 byte counts, early stream cancellation,
+no reservation side effects, and acceptance at exactly 16,384 bytes.
+
 Every requirement in `requirements.md` and `SECURITY_SPEC.md` maps to at least one named test. Test types: **Unit** (single function), **Integration** (app + database + Stripe test mode), **E2E** (full browser flow).
 
 ## Functional requirements

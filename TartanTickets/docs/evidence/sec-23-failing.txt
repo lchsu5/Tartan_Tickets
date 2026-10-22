@@ -1,0 +1,138 @@
+
+> tartan-tickets-demo@1.0.0 test
+> vitest run
+
+
+ RUN  v5.0.5 C:/Users/lizhs/OneDrive/Documents/GitHub/Tartan_Tickets/TartanTickets
+
+ ❯ tests/sec-23-request-size.test.ts (7 tests | 6 failed) 183ms
+   ❯ SEC-23: bounded checkout request bodies (7)
+     × rejects an oversized checkout request before it can reserve any seats 143ms
+     × rejects oversized bodies when the content length header is absent 10ms
+     × rejects oversized bodies even when the browser claims they are small 4ms
+     × counts UTF-8 bytes instead of characters 7ms
+     × cancels a streamed body as soon as its byte count exceeds the limit 4ms
+     × rejects a declared oversized body without reading its stream 6ms
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  6 failed | 36 passed (42)
+   Start at  18:41:20
+   Duration  2.05s (environment 61%, tests 20%, import 15%, transform 3%, worker 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/sec-23-request-size.test.ts > SEC-23: bounded checkout request bodies > rejects an oversized checkout request before it can reserve any seats
+AssertionError: expected 201 to be 413 // Object.is equality
+
+- Expected
++ Received
+
+- 413
++ 201
+
+ ❯ tests/sec-23-request-size.test.ts:21:29
+     19|     const { orders } = await import("../src/lib/events");
+     20|     const response = await POST(request(padded(limit + 1), { "Content-…
+     21|     expect(response.status).toBe(413);
+       |                             ^
+     22|     expect(orders.size).toBe(0);
+     23|     expect(await response.json()).toHaveProperty("error");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  tests/sec-23-request-size.test.ts > SEC-23: bounded checkout request bodies > rejects oversized bodies when the content length header is absent
+AssertionError: expected 201 to be 413 // Object.is equality
+
+- Expected
++ Received
+
+- 413
++ 201
+
+ ❯ tests/sec-23-request-size.test.ts:27:61
+     25|   it("rejects oversized bodies when the content length header is absen…
+     26|     const { POST } = await import("../src/app/api/orders/route");
+     27|     expect((await POST(request(padded(limit + 1)))).status).toBe(413);
+       |                                                             ^
+     28|   });
+     29|   it("rejects oversized bodies even when the browser claims they are s…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  tests/sec-23-request-size.test.ts > SEC-23: bounded checkout request bodies > rejects oversized bodies even when the browser claims they are small
+AssertionError: expected 201 to be 413 // Object.is equality
+
+- Expected
++ Received
+
+- 413
++ 201
+
+ ❯ tests/sec-23-request-size.test.ts:31:89
+     29|   it("rejects oversized bodies even when the browser claims they are s…
+     30|     const { POST } = await import("../src/app/api/orders/route");
+     31|     expect((await POST(request(padded(limit + 1), { "Content-Length": …
+       |                                                                                         ^
+     32|   });
+     33|   it("accepts a valid checkout body exactly at the byte limit", async …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  tests/sec-23-request-size.test.ts > SEC-23: bounded checkout request bodies > counts UTF-8 bytes instead of characters
+AssertionError: expected 201 to be 413 // Object.is equality
+
+- Expected
++ Received
+
+- 413
++ 201
+
+ ❯ tests/sec-23-request-size.test.ts:42:48
+     40|     expect(body.length).toBeLessThan(limit);
+     41|     expect(encoder.encode(body).byteLength).toBeGreaterThan(limit);
+     42|     expect((await POST(request(body))).status).toBe(413);
+       |                                                ^
+     43|   });
+     44|   it("cancels a streamed body as soon as its byte count exceeds the li…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  tests/sec-23-request-size.test.ts > SEC-23: bounded checkout request bodies > cancels a streamed body as soon as its byte count exceeds the limit
+AssertionError: expected 400 to be 413 // Object.is equality
+
+- Expected
++ Received
+
+- 413
++ 400
+
+ ❯ tests/sec-23-request-size.test.ts:57:38
+     55|       method: "POST", body: stream, duplex: "half",
+     56|     } as RequestInit & { duplex: "half" });
+     57|     expect((await POST(req)).status).toBe(413);
+       |                                      ^
+     58|     expect(reads).toBe(2);
+     59|     expect(cancelled).toBe(true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  tests/sec-23-request-size.test.ts > SEC-23: bounded checkout request bodies > rejects a declared oversized body without reading its stream
+AssertionError: expected 201 to be 413 // Object.is equality
+
+- Expected
++ Received
+
+- 413
++ 201
+
+ ❯ tests/sec-23-request-size.test.ts:71:38
+     69|       method: "POST", body: stream, headers: { "Content-Length": Strin…
+     70|     } as RequestInit & { duplex: "half" });
+     71|     expect((await POST(req)).status).toBe(413);
+       |                                      ^
+     72|     expect(reads).toBe(0);
+     73|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+

@@ -33,7 +33,7 @@ Story 3's emailed receipt. QR codes contain random tokens, not personal data.
 - `npm.cmd run build` creates a production build.
 - `npm.cmd run start` serves that production build locally.
 
-Verified October 22, 2026: **4 test files, 35 tests passed**, and the production
+Verified October 22, 2026: **5 test files, 42 tests passed**, and the production
 build completed successfully, including TypeScript checks.
 
 ## Assignment and specifications
@@ -46,6 +46,9 @@ build completed successfully, including TypeScript checks.
 The waitlist accepts names up to 100 characters and is an extra prototype
 feature, without duplicate detection or notifications. Stories 2, 4, 5, and 6
 are not implemented. See [Story 3 evidence and walkthrough](docs/STORY_3_EVIDENCE.md).
+
+Checkout requests are limited to 16 KiB on the server, including requests with
+missing or misleading length headers. See [Part C security evidence](docs/SEC_23_EVIDENCE.md).
 
 ## Deploy to Vercel
 
@@ -99,3 +102,4 @@ This audit compares the current demo with each requirement in the security spec.
 | SEC-20 | Partly | React renders current event text as text, but officer-entered event names and descriptions are not supported. |
 | SEC-21 | Not at all | Sensitive-action audit logging is not implemented. |
 | SEC-22 | Not at all | Audit logs, append-only storage, admin-only access, and one-year retention are not implemented. |
+| SEC-23 | Fully | POST /api/orders rejects declared or streamed bodies over 16,384 bytes with HTTP 413 before JSON parsing or state changes, cancels further reading, and accepts exactly-limit bodies for normal validation. Other routes and general denial-of-service protection are outside this rule. |
