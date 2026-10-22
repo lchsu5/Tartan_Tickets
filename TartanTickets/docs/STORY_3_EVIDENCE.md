@@ -85,6 +85,11 @@ GitHub commit `990db4a` automatically triggered deployment
 The following automated Chrome checks ran against
 https://tartan-tickets-delta.vercel.app at approximately 6:25 p.m. ET.
 
+The same four checks passed again at https://tartantickets.vercel.app at
+approximately 6:33 p.m. ET after correcting that Vercel project's Root Directory
+from `.` to `TartanTickets`. Deployment `tartantickets-9xcs9gzuk` reached Ready.
+The saved live JSON and screenshots now show this latest verification.
+
 | What I tried | What the scoped spec says should happen | What happened |
 |---|---|---|
 | Submit a blank buyer name | Refuse empty input | Browser required-field validation blocked checkout. |

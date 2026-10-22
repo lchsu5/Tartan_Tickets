@@ -8,6 +8,8 @@ an on-screen receipt with one QR code per ticket.
 
 Live app: https://tartan-tickets-delta.vercel.app
 
+Original URL (also updated and verified): https://tartantickets.vercel.app
+
 Events, reservations, receipts, and waitlist entries are held in server memory
 only. They reset on every deploy/restart and are not shared between hosting
 instances. Atomic reservations are proven only within one server instance; this
