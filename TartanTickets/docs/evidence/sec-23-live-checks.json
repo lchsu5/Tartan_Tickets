@@ -1,0 +1,23 @@
+{
+  "url": "https://tartantickets.vercel.app/api/orders",
+  "checkedAt": "2026-10-22T22:44:12.350Z",
+  "note": "Two low-volume requests to the owner app; no orders created. Exactly-limit request reaches normal unknown-order validation.",
+  "checks": [
+    {
+      "bytes": 16385,
+      "expectedStatus": 413,
+      "actualStatus": 413,
+      "response": {
+        "error": "Checkout request exceeds the 16 KiB limit."
+      }
+    },
+    {
+      "bytes": 16384,
+      "expectedStatus": 404,
+      "actualStatus": 404,
+      "response": {
+        "error": "Order not found. Demo data may have reset; start a new checkout."
+      }
+    }
+  ]
+}

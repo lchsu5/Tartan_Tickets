@@ -60,6 +60,22 @@ a model does not enforce that rule on HTTP requests.
 
 ## Limits
 
+## Live verification
+
+Commit `b6b69b2` triggered Vercel deployment `dpl_GCQxAaoH6ArhURt6BTrq5WWR5Qpo`,
+confirmed Ready. Two requests to https://tartantickets.vercel.app/api/orders
+at approximately 6:44 p.m. ET on October 22, 2026 confirmed:
+
+| Actual body size | Expected | Observed |
+|---|---|---|
+| 16,385 bytes | 413 before JSON/action processing | 413, “Checkout request exceeds the 16 KiB limit.” |
+| 16,384 bytes | Proceed to normal validation | 404 for the deliberately nonexistent order, proving size validation allowed the body through |
+
+No orders were created by these checks. Actual responses are saved in
+[sec-23-live-checks.json](evidence/sec-23-live-checks.json).
+
+## Remaining limits
+
 This rule protects the application-level checkout body reader. It does not add
 rate limits, request timeouts, authentication, limits for other endpoints, or
 protection against every denial-of-service attack. Hosting infrastructure may
